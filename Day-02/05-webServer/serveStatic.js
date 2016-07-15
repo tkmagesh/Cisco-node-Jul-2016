@@ -17,19 +17,7 @@ module.exports = function(req, res, next){
 			res.end();
 			return;
 		}
-		console.log('resource exits ' + resourcePath)
-		var stream = fs.createReadStream(resourcePath);
-		stream.on('open', function(){
-			console.log('[serveStatic] opening resource for writing to the response');
-		})
-		stream.on('data', function(chunk){
-			console.log('[serveStatic] serving one chunk of the resource');
-			res.write(chunk);
-		})	
-		stream.on('end', function(chunk){
-			console.log('[serveStatic] completed serving the resource');
-			res.end();
-		})	
+		fs.createReadStream(resourcePath).pipe(res);
 	} else {
 		next();
 	}
