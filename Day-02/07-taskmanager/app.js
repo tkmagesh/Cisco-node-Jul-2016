@@ -11,6 +11,8 @@ var taskRoutes = require('./routes/taskRoutes');
 
 var app = express();
 
+app.set('env', 'dev');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
