@@ -8,17 +8,20 @@ function isStatic(resource){
 	var resExtn = path.extname(resource);
 	return staticExtns.indexOf(resExtn) !== -1;
 }
-module.exports = function(req, res, next){
+module.exports = function(folderPath){
 
-	if (isStatic(req.urlData.pathname)){
-		var resourcePath = path.join(__dirname, req.urlData.pathname)
-		if (!fs.existsSync(resourcePath)){
-			res.statusCode = 404;
-			res.end();
-			return;
+	return function(req, res, next){
+
+		if (isStatic(req.urlData.pathname)){
+			var resourcePath = path.join(folderPath, req.urlData.pathname)
+			if (!fs.existsSync(resourcePath)){
+				res.statusCode = 404;
+				res.end();
+				return;
+			}
+			fs.createReadStream(resourcePath).pipe(res);
+		} else {
+			next();
 		}
-		fs.createReadStream(resourcePath).pipe(res);
-	} else {
-		next();
 	}
-}
+};
