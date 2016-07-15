@@ -8,7 +8,7 @@ function isStatic(resource){
 	var resExtn = path.extname(resource);
 	return staticExtns.indexOf(resExtn) !== -1;
 }
-module.exports = function(req, res){
+module.exports = function(req, res, next){
 
 	if (isStatic(req.urlData.pathname)){
 		var resourcePath = path.join(__dirname, req.urlData.pathname)
@@ -30,5 +30,7 @@ module.exports = function(req, res){
 			console.log('[serveStatic] completed serving the resource');
 			res.end();
 		})	
+	} else {
+		next();
 	}
 }
